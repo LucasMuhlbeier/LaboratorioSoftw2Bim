@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gest'On - Produtos</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #2ecc71; overflow: hidden; }
+
+        .sidebar { width: 250px; background-color: #000; color: white; display: flex; flex-direction: column; padding: 20px; justify-content: space-between; }
+        .logo-container { text-align: center; margin-bottom: 30px; font-size: 1.8rem; font-weight: bold; color: #2ecc71; }
+        nav ul { list-style: none; }
+        nav ul li { padding: 10px 15px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
+        nav ul li:hover { background: #1a1a1a; }
+        nav ul li a { color: white; text-decoration: none; display: block; width: 100%; font-size: 0.95rem; }
+        .active-item { background: #1a1a1a; }
+        .active-item a { color: #2ecc71 !important; font-weight: bold; }
+
+        .sidebar-footer { padding-top: 20px; border-top: 1px solid #333; margin-top: auto; }
+        .sidebar-footer a { color: white; text-decoration: none; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 15px; padding-left: 15px; }
+
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header-section h2 { text-transform: uppercase; font-size: 1.5rem; color: #000; font-weight: 800; }
+        .btn-novo-produto { background: #000; color: #fff; border: none; padding: 10px 35px; border-radius: 12px; font-size: 0.9rem; cursor: pointer; font-weight: bold; text-transform: uppercase; transition: 0.3s; text-decoration: none; }
+
+        .form-container { background: white; border-radius: 30px; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+
+        .alert { padding: 15px; border-radius: 12px; margin-bottom: 20px; font-weight: bold; }
+        .alert-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .alert-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        .table-section { background: #e8e8e8; border-radius: 20px; padding: 25px; }
+        .table-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .table-section h3 { font-size: 1.1rem; font-weight: 800; color: #000; text-transform: uppercase; }
+
+        .search-box { padding: 10px 15px; border-radius: 10px; border: 1px solid #ccc; width: 320px; outline: none; font-size: 0.9rem; }
+
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; }
+        th { background: #f8f8f8; color: #555; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; padding: 15px; text-align: left; }
+        td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.95rem; color: #333; }
+
+        .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd; }
+        .pagination-info { font-size: 0.85rem; color: #6c757d; font-weight: 500; }
+        .pagination-buttons { display: flex; gap: 10px; }
+        .btn-page { background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #000; transition: 0.2s; }
+        .btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div>
+        <div class="logo-container">Gest'On</div>
+        <nav>
+            <ul>
+                <li><a th:href="@{/home}">Dashboard</a></li>
+                <li><a th:href="@{/entradas}">Entradas</a></li>
+                <li><a th:href="@{/saidas}">Saídas</a></li>
+                <li><a th:href="@{/baixas}">Baixas</a></li>
+                <li class="active-item"><a th:href="@{/produtos}">Produtos</a></li>
+                <li><a th:href="@{/relatorios}">Relatórios</a></li>
+                <li><a th:href="@{/fornecedores}">Fornecedores</a></li>
+                <li><a th:href="@{/perfil}">Perfil e Configurações</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="sidebar-footer">
+        <a th:href="@{/logout}">Sair</a>
+        <div style="padding-left: 15px;">
+            <p style="color: white; font-size: 0.9rem;">Olá, <span style="color: #2ecc71; font-weight: bold;" th:text="${session.usuarioLogado != null ? session.usuarioLogado.nome : 'Lucas'}">Lucas</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="header-section">
+        <h2>Listagem de Produtos</h2>
+        <a th:href="@{/produtos/novo}" class="btn-novo-produto">Novo Produto</a>
+    </div>
+
+    <div class="form-container">
+        <div th:if="${mensagem}" class="alert alert-success" th:text="${mensagem}"></div>
+        <div th:if="${erro}" class="alert alert-error" th:text="${erro}"></div>
+
+        <div class="table-section">
+            <div class="table-header-flex">
+                <h3>Gerenciar produtos</h3>
+                <input type="text" id="inputBusca" class="search-box" placeholder=" Pesquisar por nome ou fornecedor...">
+            </div>
+            <table>
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Produto</th>
+                    <th>Qtd Estoque</th>
+                    <th>P. Custo</th>
+                    <th>P. Venda</th>
+                    <th>Vencimento</th>
+                    <th>Fornecedor</th>
+                </tr>
+                </thead>
+                <tbody id="tabelaCorpo">
+                <tr th:each="p : ${produtos}" class="linha-produto">
+                    <td th:text="${'#' + p.id}" style="font-weight: bold; color: #555;"></td>
+                    <td th:text="${p.nome}" style="font-weight: bold; color: #000;"></td>
+                    <td th:text="${p.qtdEstoque}"></td>
+                    <td th:text="${p.precoCusto != null ? 'R$ ' + #numbers.formatDecimal(p.precoCusto, 1, 2) : '---'}"></td>
+                    <td th:text="${p.precoVenda != null ? 'R$ ' + #numbers.formatDecimal(p.precoVenda, 1, 2) : '---'}"></td>
+                    <td th:text="${p.dataVencimento != null ? #temporals.format(p.dataVencimento, 'dd/MM/yyyy') : '---'}"></td>
+                    <td th:text="${p.fornecedor != null ? p.fornecedor.nome : '---'}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(produtos)}" id="linhaVazia">
+                    <td colspan="7" style="text-align: center; padding: 20px; color: #888;">Nenhum produto cadastrado no sistema.</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination-container" th:if="${not #lists.isEmpty(produtos)}">
+                <div class="pagination-info" id="pagiInfo">Mostrando 0-0 de 0 registros</div>
+                <div class="pagination-buttons">
+                    <button type="button" class="btn-page" id="btnAnterior">Anterior</button>
+                    <button type="button" class="btn-page" id="btnProximo">Próximo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var itensPorPagina = 5;
+        var paginaAtual = 1;
+        var linhasVisiveis = [];
+
+        function aplicarPagina() {
+            var totalReg = linhasVisiveis.length;
+            var totalPaginas = Math.ceil(totalReg / itensPorPagina) || 1;
+
+            if (paginaAtual > totalPaginas) paginaAtual = totalPaginas;
+            if (paginaAtual < 1) paginaAtual = 1;
+
+            var inicio = (paginaAtual - 1) * itensPorPagina;
+            var fim = inicio + itensPorPagina;
+
+            $('#tabelaCorpo tr.linha-produto').hide();
+            $(linhasVisiveis).slice(inicio, fim).show();
+
+            $('#btnAnterior').prop('disabled', paginaAtual === 1);
+            $('#btnProximo').prop('disabled', paginaAtual === totalPaginas || totalReg === 0);
+
+            var mostrandoFim = fim > totalReg ? totalReg : fim;
+            var mostrandoInicio = totalReg === 0 ? 0 : inicio + 1;
+            $('#pagiInfo').text('Mostrando ' + mostrandoInicio + '-' + mostrandoFim + ' de ' + totalReg + ' registros');
+        }
+
+        function atualizarListaVisivel() {
+            linhasVisiveis = [];
+            var busca = $('#inputBusca').val().toLowerCase();
+
+            $('#tabelaCorpo tr.linha-produto').each(function() {
+                var texto = $(this).text().toLowerCase();
+                if (!busca || texto.indexOf(busca) !== -1) {
+                    linhasVisiveis.push(this);
+                }
+            });
+
+            if (linhasVisiveis.length === 0) {
+                $('#linhaVazia').show();
+                $('.pagination-container').hide();
+            } else {
+                $('#linhaVazia').hide();
+                $('.pagination-container').show();
+            }
+
+            paginaAtual = 1;
+            aplicarPagina();
+        }
+
+        $('#inputBusca').on('keyup', atualizarListaVisivel);
+
+        $('#btnAnterior').on('click', function() {
+            paginaAtual--;
+            aplicarPagina();
+        });
+
+        $('#btnProximo').on('click', function() {
+            paginaAtual++;
+            aplicarPagina();
+        });
+
+        atualizarListaVisivel();
+    });
+</script>
+
+</body>
+</html>

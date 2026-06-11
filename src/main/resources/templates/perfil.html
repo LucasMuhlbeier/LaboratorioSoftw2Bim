@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Gest'On - Perfil e Configurações</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #2ecc71; overflow: hidden; }
+
+        .sidebar { width: 250px; background-color: #000; color: white; display: flex; flex-direction: column; padding: 20px; justify-content: space-between; flex-shrink: 0; }
+        .logo-container { text-align: center; margin-bottom: 30px; font-size: 1.8rem; font-weight: bold; color: #2ecc71; }
+        nav ul { list-style: none; }
+        nav ul li { padding: 10px 15px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
+        nav ul li:hover { background: #1a1a1a; }
+        nav ul li a { color: white; text-decoration: none; display: block; width: 100%; font-size: 0.95rem; }
+        .active-item { background: #1a1a1a; }
+        .active-item a { color: #2ecc71 !important; font-weight: bold; }
+
+        .sidebar-footer { padding-top: 20px; border-top: 1px solid #333; margin-top: auto; }
+        .sidebar-footer a { color: white; text-decoration: none; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 15px; padding-left: 15px; }
+
+        .main-content { flex: 1; padding: 40px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; position: relative; }
+
+        .header-section { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; color: #000; }
+        .header-section h2 { font-size: 1.4rem; font-weight: 600; color: #000; }
+        .header-section svg { width: 24px; height: 24px; fill: #000; }
+
+        .profile-container { background: white; border-radius: 30px; padding: 40px; width: 100%; max-width: 800px; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; min-height: 450px; display: flex; flex-direction: column; align-items: center; }
+        .profile-title { font-size: 1.6rem; color: #000; font-weight: 500; margin-bottom: 25px; text-align: center; }
+
+        .avatar-container { margin-bottom: 40px; }
+        .avatar-container svg { width: 100px; height: 100px; fill: #000; }
+
+        .user-details { width: 100%; max-width: 400px; margin-bottom: auto; align-self: flex-start; padding-left: 40px; }
+        .info-row { display: flex; align-items: center; margin-bottom: 20px; font-size: 1.2rem; color: #000; }
+        .info-label { font-weight: bold; margin-right: 10px; width: 70px; }
+        .info-value { color: #555; }
+
+        .status-badge { background-color: #2ecc71; color: #000; font-size: 0.95rem; font-weight: bold; padding: 4px 18px; border-radius: 20px; display: inline-block; }
+
+        .btn-logout-account { background-color: #e74c3c; color: white; border: none; padding: 10px 25px; border-radius: 20px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: background 0.3s; position: absolute; bottom: 30px; right: 30px; text-decoration: none; }
+        .btn-logout-account:hover { background-color: #c0392b; }
+
+        .page-footer { text-align: center; margin-top: auto; padding-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .page-footer p { font-size: 1rem; color: #000; font-weight: 500; }
+        .footer-logo { font-size: 1.4rem; font-weight: bold; color: #000; margin-bottom: 2px; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div>
+        <div class="logo-container">Gest'On</div>
+        <nav>
+            <ul>
+                <li><a th:href="@{/home}">Dashboard</a></li>
+                <li><a th:href="@{/entradas}">Entradas</a></li>
+                <li><a th:href="@{/saidas}">Saídas</a></li>
+                <li><a th:href="@{/baixas}">Baixas</a></li>
+                <li><a th:href="@{/produtos}">Produtos</a></li>
+                <li><a th:href="@{/relatorios}">Relatórios</a></li>
+                <li><a th:href="@{/fornecedores}">Fornecedores</a></li>
+                <li class="active-item"><a th:href="@{/perfil}">Perfil e Configurações</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="sidebar-footer">
+        <a th:href="@{/logout}">Sair</a>
+        <div style="padding-left: 15px;">
+            <p style="color: white; font-size: 0.9rem;">Olá, <span style="color: #2ecc71; font-weight: bold;" th:text="${session.usuarioLogado != null ? session.usuarioLogado.nome : 'Lucas'}">Lucas</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <div>
+        <div class="header-section">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"></path>
+            </svg>
+            <h2>Perfil e Configurações</h2>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-title">Perfil do usuário</div>
+
+            <div class="avatar-container">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"></path>
+                </svg>
+            </div>
+
+            <div class="user-details">
+                <div class="info-row">
+                    <span class="info-label">Nome:</span>
+                    <span class="info-value" th:text="${session.usuarioLogado != null ? session.usuarioLogado.nome : 'João da Silva'}">João da Silva</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">CPF:</span>
+                    <span class="info-value" th:text="${session.usuarioLogado != null ? session.usuarioLogado.cpf : '111.222.333-44'}">111.222.333-44</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="status-badge">Ativo</span>
+                </div>
+            </div>
+
+            <a th:href="@{/logout}" class="btn-logout-account">Sair da conta</a>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <div class="footer-logo" style="display: flex; flex-direction: column; align-items: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" style="fill: #000; margin-bottom: 2px;">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+            </svg>
+            <span style="font-weight: 800; font-size: 1.1rem; letter-spacing: 0.5px;">Gest'On</span>
+        </div>
+        <p>A solução para o seu estoque</p>
+    </div>
+
+</div>
+
+</body>
+</html>

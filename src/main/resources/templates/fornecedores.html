@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gest'On - Fornecedores</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #2ecc71; overflow: hidden; }
+
+        .sidebar { width: 250px; background-color: #000; color: white; display: flex; flex-direction: column; padding: 20px; justify-content: space-between; }
+        .logo-container { text-align: center; margin-bottom: 30px; font-size: 1.8rem; font-weight: bold; color: #2ecc71; }
+        nav ul { list-style: none; }
+        nav ul li { padding: 10px 15px; margin-bottom: 5px; border-radius: 8px; transition: 0.3s; }
+        nav ul li:hover { background: #1a1a1a; }
+        nav ul li a { color: white; text-decoration: none; display: block; width: 100%; font-size: 0.95rem; }
+        .active-item { background: #1a1a1a; }
+        .active-item a { color: #2ecc71 !important; font-weight: bold; }
+
+        .sidebar-footer { padding-top: 20px; border-top: 1px solid #333; margin-top: auto; }
+        .sidebar-footer a { color: white; text-decoration: none; font-weight: bold; font-size: 0.95rem; display: block; margin-bottom: 15px; padding-left: 15px; }
+
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .header-section h2 { text-transform: uppercase; font-size: 1.5rem; color: #000; font-weight: 800; }
+
+        .form-container { background: white; border-radius: 30px; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 25px; }
+
+        .form-cadastro { display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; }
+        .form-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 200px; }
+        .form-group label { font-size: 0.8rem; font-weight: bold; color: #555; text-transform: uppercase; }
+        .input-field { padding: 12px 15px; border-radius: 10px; border: 1px solid #cbd5e1; background: white; outline: none; font-size: 0.9rem; }
+
+        .btn-salvar { background: #2ecc71; color: white; padding: 12px 25px; border: none; border-radius: 10px; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: 0.3s; height: 46px; }
+        .btn-salvar:hover { background: #27ae60; }
+
+        .container-tabela { background: white; border-radius: 30px; padding: 25px 0 0 0; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 25px; overflow: hidden; }
+
+        .table-header-flex { display: flex; justify-content: space-between; align-items: center; padding: 0 25px 15px 25px; }
+        .table-header-flex span { font-size: 1.1rem; font-weight: 800; color: #000; text-transform: uppercase; }
+        .search-box { padding: 10px 15px; border-radius: 10px; border: 1px solid #cbd5e1; width: 300px; outline: none; font-size: 0.9rem; }
+        .search-box:focus { border-color: #2ecc71; }
+
+        table { width: 100%; border-collapse: collapse; background: white; overflow: hidden; }
+        th { background: #f8f8f8; color: #555; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; padding: 15px; text-align: left; border-bottom: 2px solid #cbd5e1; }
+        td { padding: 15px; border-bottom: 1px solid #eee; font-size: 0.95rem; color: #333; }
+
+        .paginacao-container { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: white; border-radius: 0 0 30px 30px; border-top: 1px solid #f1f5f9; font-size: 0.9rem; color: #64748b; }
+        .botoes-paginacao { display: flex; gap: 10px; }
+        .btn-pag { background: #f1f5f9; color: #0f172a; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 0.9rem; cursor: pointer; text-decoration: none; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+        .btn-pag:hover:not(.disabled) { background: #e2e8f0; }
+        .btn-pag.disabled { color: #94a3b8; cursor: not-allowed; background: #f8fafc; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div>
+        <div class="logo-container">Gest'On</div>
+        <nav>
+            <ul>
+                <li><a th:href="@{/home}">Dashboard</a></li>
+                <li><a th:href="@{/entradas}">Entradas</a></li>
+                <li><a th:href="@{/saidas}">Saídas</a></li>
+                <li><a th:href="@{/baixas}">Baixas</a></li>
+                <li><a th:href="@{/produtos}">Produtos</a></li>
+                <li><a th:href="@{/relatorios}">Relatórios</a></li>
+                <li class="active-item"><a th:href="@{/fornecedores}">Fornecedores</a></li>
+                <li><a th:href="@{/perfil}">Perfil e Configurações</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="sidebar-footer">
+        <a th:href="@{/logout}">Sair</a>
+        <div style="padding-left: 15px;">
+            <p style="color: white; font-size: 0.9rem;">Olá, <span style="color: #2ecc71; font-weight: bold;" th:text="${session.usuarioLogado != null ? session.usuarioLogado.nome : 'Lucas'}">Lucas</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="header-section">
+        <h2>Fornecedores Cadastrados</h2>
+    </div>
+
+    <div class="form-container">
+        <form th:action="@{/fornecedores/salvar}" th:object="${fornecedor}" method="POST" class="form-cadastro">
+            <div class="form-group">
+                <label>Nome / Razão Social</label>
+                <input type="text" th:field="*{nome}" class="input-field" placeholder="Nome do fornecedor..." required>
+            </div>
+            <div class="form-group">
+                <label>CNPJ</label>
+                <input type="text" th:field="*{cnpj}" class="input-field" placeholder="Apenas números..." maxlength="14">
+            </div>
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="text" th:field="*{telefone}" class="input-field" placeholder="Apenas números..." maxlength="11">
+            </div>
+            <button type="submit" class="btn-salvar">+ Cadastrar</button>
+        </form>
+    </div>
+
+    <div class="container-tabela">
+        <div class="table-header-flex">
+            <span>Fornecedores Cadastrados</span>
+            <input type="text" id="inputBusca" class="search-box" placeholder=" Pesquisar fornecedores...">
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th style="width: 100px;">ID</th>
+                <th>Nome / Razão Social</th>
+                <th>CNPJ</th>
+                <th>Telefone</th>
+            </tr>
+            </thead>
+            <tbody id="tabelaCorpo">
+            <tr th:each="f : ${fornecedoresPage.content}" class="linha-fornecedor">
+                <td th:text="${'#' + f.id}" style="font-weight: bold; color: #555;"></td>
+                <td th:text="${f.nome}" style="font-weight: bold; color: #000;"></td>
+                <td th:text="${f.cnpj != null and f.cnpj != '' ? f.cnpj : '---'}"></td>
+                <td th:text="${f.telefone != null and f.telefone != '' ? f.telefone : '---'}"></td>
+            </tr>
+            <tr th:if="${fornecedoresPage.totalElements == 0}" id="linhaVazia">
+                <td colspan="4" style="text-align: center; padding: 20px; color: #888;">Nenhum fornecedor cadastrado no sistema.</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="paginacao-container" th:if="${fornecedoresPage.totalElements > 0}" id="paginacaoContainer">
+            <div>
+                <span>Mostrando </span>
+                <span th:text="${(currentPage * fornecedoresPage.size) + 1}" style="font-weight: 600; color: #0f172a;">1</span>
+                <span>-</span>
+                <span th:text="${(currentPage * fornecedoresPage.size) + fornecedoresPage.numberOfElements}" style="font-weight: 600; color: #0f172a;">5</span>
+                <span> de </span>
+                <span th:text="${fornecedoresPage.totalElements}" style="font-weight: 600; color: #0f172a;">42</span>
+                <span> registros</span>
+            </div>
+
+            <div class="botoes-paginacao">
+                <a th:href="@{/fornecedores(page=${currentPage - 1})}"
+                   th:class="'btn-pag ' + (${currentPage == 0} ? 'disabled' : '')"
+                   th:style="${currentPage == 0} ? 'pointer-events: none;' : ''">
+                    Anterior
+                </a>
+
+                <a th:href="@{/fornecedores(page=${currentPage + 1})}"
+                   th:class="'btn-pag ' + (${currentPage + 1 >= fornecedoresPage.totalPages} ? 'disabled' : '')"
+                   th:style="${currentPage + 1 >= fornecedoresPage.totalPages} ? 'pointer-events: none;' : ''">
+                    Próximo
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#inputBusca').on('keyup', function() {
+            var busca = $(this).val().toLowerCase();
+            var linhas = $('#tabelaCorpo tr.linha-fornecedor');
+            var contVisiveis = 0;
+
+            linhas.each(function() {
+                var texto = $(this).text().toLowerCase();
+                if (texto.indexOf(busca) !== -1) {
+                    $(this).show();
+                    contVisiveis++;
+                } else {
+                    $(this).hide();
+                }
+            });
+
+            if (contVisiveis === 0 && linhas.length > 0) {
+                if ($('#linhaVaziaDinamica').length === 0) {
+                    $('#tabelaCorpo').append('<tr id="linhaVaziaDinamica"><td colspan="4" style="text-align: center; padding: 20px; color: #888;">Nenhum resultado encontrado para a busca.</td></tr>');
+                }
+                $('#paginacaoContainer').hide();
+            } else {
+                $('#linhaVaziaDinamica').remove();
+                if (linhas.length > 0) {
+                    $('#paginacaoContainer').show();
+                }
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

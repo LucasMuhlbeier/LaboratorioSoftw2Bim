@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Relatório de Posição de Estoque</title>
+    <style>
+        @page { size: A4; margin: 20mm; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; line-height: 1.4; }
+        .header { border-bottom: 2px solid #2ecc71; padding-bottom: 10px; margin-bottom: 20px; }
+        .titulo { font-size: 20px; font-weight: bold; color: #000; text-transform: uppercase; }
+        .meta-dados { font-size: 11px; color: #666; margin-top: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background-color: #f8f9fa; border-bottom: 2px solid #cbd5e1; color: #475569; text-transform: uppercase; font-size: 10px; font-weight: bold; padding: 10px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; }
+        .alerta-estoque { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="titulo" th:text="${tituloRelatorio}">Relatório de Posição de Estoque - Produtos</div>
+    <div class="meta-dados">
+        Gerado automaticamente pelo sistema Gest'On.
+    </div>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th style="width: 80px;">ID</th>
+        <th>Nome do Produto</th>
+        <th style="width: 100px;">Qtd. Estoque</th>
+        <th style="width: 100px;">Estoque Mín.</th>
+        <th style="width: 120px;">Preço Venda</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${dados}">
+        <td th:text="${'#' + p.id}" style="font-weight: bold; color: #64748b;"></td>
+        <td th:text="${p.nome}"></td>
+        <td th:text="${p.qtdEstoque}" th:classappend="${p.qtdEstoque <= p.estqMinimo} ? 'alerta-estoque'">0</td>
+        <td th:text="${p.estqMinimo}">0</td>
+        <td th:text="${p.precoVenda != null ? 'R$ ' + #numbers.formatDecimal(p.precoVenda, 1, 'POINT', 2, 'COMMA') : 'R$ 0,00'}"></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gest'On - Login</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { display: flex; height: 100vh; overflow: hidden; }
+
+        .login-side {
+            background-color: #000;
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .brand-side {
+            background-color: #2ecc71;
+            width: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .login-form { width: 100%; max-width: 320px; text-align: center; }
+        .logo { font-size: 2.5rem; margin-bottom: 40px; color: #2ecc71; font-weight: bold; letter-spacing: 2px; }
+
+        h2 { margin-bottom: 20px; font-weight: 300; }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border-radius: 25px;
+            border: 1px solid #333;
+            background: #111;
+            color: white;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        input:focus { outline: none; border-color: #2ecc71; background: #222; }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 25px;
+            border: none;
+            background: #2ecc71;
+            color: black;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover { background: #27ae60; transform: scale(1.02); }
+
+        .error-msg {
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .circle-text {
+            text-align: center;
+            color: #000;
+            font-size: 2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-side">
+    <div class="logo">Gest'On</div>
+
+    <div class="login-form">
+        <h2>Bem-vindo</h2>
+
+        <div th:if="${param.erro}" class="error-msg">
+            CPF ou Senha incorretos. Tente novamente.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <input type="text" name="cpf" id="cpf" placeholder="CPF (somente números)"
+                   maxlength="11" required autocomplete="off">
+
+            <input type="password" name="senha" placeholder="Senha" required>
+
+            <button type="submit">ENTRAR</button>
+        </form>
+    </div>
+</div>
+
+<div class="brand-side">
+    <div class="circle-text">
+        <p>A solução inteligente<br>para o seu estoque</p>
+    </div>
+</div>
+
+<script>
+
+    document.getElementById('cpf').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    });
+</script>
+
+</body>
+</html>

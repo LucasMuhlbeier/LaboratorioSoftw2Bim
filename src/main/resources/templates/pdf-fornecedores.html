@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Lista Geral de Fornecedores</title>
+    <style>
+        @page { size: A4; margin: 20mm; }
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; line-height: 1.4; }
+        .header { border-bottom: 2px solid #2ecc71; padding-bottom: 10px; margin-bottom: 20px; }
+        .titulo { font-size: 18px; font-weight: bold; color: #000; text-transform: uppercase; }
+        .meta-dados { font-size: 11px; color: #666; margin-top: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background-color: #f8f9fa; border-bottom: 2px solid #cbd5e1; color: #475569; text-transform: uppercase; font-size: 10px; font-weight: bold; padding: 10px; text-align: left; }
+        td { padding: 12px 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="titulo" th:text="${tituloRelatorio}">Lista Geral de Fornecedores Parceiros</div>
+    <div class="meta-dados">Gerado automaticamente pelo sistema Gest'On.</div>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th style="width: 80px;">ID</th>
+        <th>Nome do Fornecedor</th>
+        <th style="width: 150px;">CNPJ</th>
+        <th style="width: 120px;">Telefone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="f : ${dados}">
+        <td th:text="${'#' + f.id}" style="font-weight: bold; color: #64748b;"></td>
+        <td th:text="${f.nome}"></td>
+        <td th:text="${f.cnpj != null and f.cnpj != '' ? f.cnpj : '---'}"></td>
+        <td th:text="${f.telefone != null and f.telefone != '' ? f.telefone : '---'}"></td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(dados)}">
+        <td colspan="4" style="text-align: center; color: #888; padding: 20px;">Nenhum fornecedor parceiro cadastrado.</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
