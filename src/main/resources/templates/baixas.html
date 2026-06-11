@@ -28,39 +28,50 @@
 
         .form-container { background: white; border-radius: 30px; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
-        .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+        .input-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 25px; }
         .input-group { display: flex; flex-direction: column; position: relative; }
-        .input-group label { color: #000; margin-bottom: 8px; font-size: 1rem; font-weight: 700; }
-        .input-group input, .input-group select { background: #f0f0f0; border: 1px solid #ddd; padding: 14px; border-radius: 10px; outline: none; font-family: 'Segoe UI', sans-serif; font-size: 1rem; color: #000; font-weight: 500; }
+        .input-group label { color: #000; margin-bottom: 8px; font-size: 0.9rem; font-weight: 700; }
+        .input-group input, .input-group select { background: #f0f0f0; border: 1px solid #ddd; padding: 12px 15px; border-radius: 12px; outline: none; font-family: 'Segoe UI', sans-serif; font-size: 0.95rem; color: #000; font-weight: 500; height: 48px; }
 
-        .custom-select-wrapper { position: relative; width: 100%; }
-        .custom-select-trigger { padding: 14px; border-radius: 10px; border: 1px solid #ddd; background-color: #f0f0f0; font-size: 1rem; height: 50px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: #000; font-weight: 500; }
-        .custom-select-trigger:after { content: ''; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #555; }
-        .custom-options-container { position: absolute; display: none; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; border-radius: 0 0 12px 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 99; max-height: 280px; overflow-y: auto; }
 
-        .search-box-container { padding: 8px; background: #fff; position: sticky; top: 0; border-bottom: 1px solid #eee; z-index: 10; }
-        .search-produto-input { width: 100%; padding: 8px 12px; font-size: 0.9rem; border-radius: 6px; border: 1px solid #ccc; outline: none; }
-        .search-produto-input:focus { border-color: #2ecc71; }
+        .baixa-select-wrapper { position: relative; width: 100%; }
+        .baixa-select-trigger { padding: 12px 15px; border-radius: 12px; border: 1px solid #ddd; background-color: #f0f0f0; font-size: 0.95rem; height: 48px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: #000; font-weight: 500; }
+        .baixa-select-trigger:after { content: ''; width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #555; }
+        .baixa-options-container { position: absolute; display: none; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #ccc; border-radius: 0 0 12px 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 99; max-height: 280px; overflow-y: auto; }
 
-        .custom-option { padding: 10px 15px; cursor: pointer; font-size: 0.95rem; color: #333; transition: 0.2s; }
-        .custom-option:hover { background-color: #007bff; color: #fff; }
-        .option-placeholder { color: #555; font-weight: 500; }
+        .baixa-search-container { padding: 8px; background: #fff; position: sticky; top: 0; border-bottom: 1px solid #eee; z-index: 10; }
+        .baixa-search-input { width: 100%; padding: 8px 12px; font-size: 0.9rem; border-radius: 6px; border: 1px solid #ccc; outline: none; background: #fff !important; height: auto !important; }
+        .baixa-search-input:focus { border-color: #2ecc71; }
 
-        .table-section { background: #e8e8e8; border-radius: 20px; padding: 25px; margin-top: 25px; }
+        .baixa-option { padding: 10px 15px; cursor: pointer; font-size: 0.95rem; color: #333; transition: 0.2s; text-align: left; }
+        .baixa-option:hover { background-color: #007bff; color: #fff; }
+        .baixa-placeholder { color: #555; font-weight: 500; }
+
+        .table-section { background: #ebeeef; border-radius: 20px; padding: 25px; margin-top: 10px; }
         .table-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .table-section span { font-size: 1.1rem; font-weight: 800; color: #000; }
+        .table-section span { font-size: 1rem; font-weight: 800; color: #000; text-transform: uppercase; }
 
-        .search-box { padding: 10px 15px; border-radius: 10px; border: 1px solid #ccc; width: 300px; outline: none; font-size: 0.9rem; }
+        .search-box { padding: 10px 15px 10px 35px; border-radius: 10px; border: 1px solid #ccc; width: 260px; outline: none; font-size: 0.85rem; color: #666; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23777' class='bi bi-search' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E") no-repeat 12px center; }
 
         table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; }
-        th { background: #f8f8f8; color: #555; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; padding: 15px; }
-        th, td { text-align: left; padding: 15px; border-bottom: 1px solid #eee; font-size: 0.95rem; color: #333; }
+        th { background: #fdfdfd; color: #555; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1px; padding: 15px; border-bottom: 2px solid #ebeeef; }
+        th, td { text-align: left; padding: 15px; border-bottom: 1px solid #ebeeef; font-size: 0.92rem; color: #333; }
 
         .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #ddd; }
         .pagination-info { font-size: 0.85rem; color: #6c757d; font-weight: 500; }
         .pagination-buttons { display: flex; gap: 10px; }
         .btn-page { background: #f0f0f0; border: none; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; color: #000; transition: 0.2s; }
         .btn-page:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 9999; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: 400px; text-align: center; }
+        .modal-content h3 { margin-bottom: 15px; font-size: 1.2rem; color: #333; font-weight: 700; }
+        .modal-content input { width: 100%; background: #f0f0f0; border: 1px solid #ddd; padding: 12px; border-radius: 10px; outline: none; font-size: 1rem; text-align: center; margin-bottom: 20px; height: 45px !important; }
+        .modal-buttons { display: flex; gap: 10px; justify-content: center; }
+        .btn-modal-confirmar { background: #000; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-modal-cancelar { background: #ddd; color: #333; border: none; padding: 10px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-modal-confirmar:hover { background: #222; }
+        .btn-modal-cancelar:hover { background: #ccc; }
     </style>
 </head>
 <body>
@@ -94,7 +105,7 @@
     <form id="formBaixa" th:action="@{/baixas/salvar}" method="post">
         <div class="header-section">
             <h2>Baixa de Produto</h2>
-            <button type="button" id="btnConfirmarBaixa" class="btn-salvar-topo">CONFIRMAR</button>
+            <button type="button" id="btnGatilhoConfirmar" class="btn-salvar-topo">CONFIRMAR</button>
         </div>
 
         <div class="form-container">
@@ -102,32 +113,37 @@
             <div th:if="${erro}" style="background:#ffeded; color:#d9534f; padding:12px; border-radius:10px; margin-bottom:15px; font-weight: 600;" th:text="${erro}"></div>
 
             <div class="input-grid">
+
                 <div class="input-group">
                     <label>Produto</label>
                     <input type="hidden" name="produtoId" id="realProdutoInput" required>
 
-                    <div class="custom-select-wrapper">
-                        <div class="custom-select-trigger" id="comboTrigger">Selecione o produto...</div>
-                        <div class="custom-options-container" id="comboOptions">
-                            <div class="custom-option option-placeholder" data-value="">Selecione o produto...</div>
-                            <div class="search-box-container">
-                                <input type="text" id="campoFiltroProduto" class="search-produto-input" placeholder=" Digite para pesquisar...">
+                    <div class="baixa-select-wrapper">
+                        <div class="baixa-select-trigger" id="baixaComboTrigger">Selecione o produto...</div>
+                        <div class="baixa-options-container" id="baixaComboOptions">
+                            <div class="baixa-option baixa-placeholder" data-value="">Selecione o produto...</div>
+                            <div class="baixa-search-container">
+                                <input type="text" id="baixaCampoFiltroProduto" class="baixa-search-input" placeholder=" Digite para pesquisar...">
                             </div>
                             <div th:each="p : ${listaProdutos}"
-                                 class="custom-option item-produto"
+                                 class="baixa-option item-produto-baixa"
                                  th:data-value="${p.id}"
                                  th:text="${p.nome} + ' (Disp: ' + ${p.qtdEstoque} + ')'">
                             </div>
                         </div>
                     </div>
                 </div>
+
+
                 <div class="input-group">
                     <label>Quantidade</label>
-                    <input type="number" name="quantidade" required min="1" placeholder="0">
+                    <input type="number" name="quantidade" id="inputQuantidade" required min="1" value="0">
                 </div>
+
+
                 <div class="input-group">
                     <label>Motivo da Baixa</label>
-                    <select name="motivo" required>
+                    <select name="motivo" id="selectMotivo" required>
                         <option value="">Selecione o motivo...</option>
                         <option value="Avaria">Avaria</option>
                         <option value="Quebra">Quebra</option>
@@ -135,12 +151,32 @@
                         <option value="Outros">Outros</option>
                     </select>
                 </div>
+
+
+                <div class="input-group">
+                    <label>Data da Baixa</label>
+                    <input type="date" name="dataBaixa" id="dataBaixa" required>
+                </div>
             </div>
+
+
+            <div class="modal-overlay" id="modalSenhaContainer">
+                <div class="modal-content">
+                    <h3>Autenticação Requerida</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Digite a senha chave para confirmar a baixa.</p>
+                    <input type="password" name="senhaAutenticacao" id="inputSenhaModal" placeholder="Senha de Autorização">
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-modal-cancelar" id="btnCancelarModal">Cancelar</button>
+                        <button type="submit" class="btn-modal-confirmar" id="btnEnviarForm">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="table-section">
                 <div class="table-header-flex">
-                    <span>PRODUTOS EM ESTOQUE</span>
-                    <input type="text" id="inputBusca" class="search-box" placeholder="🔍 Filtrar produtos nesta página...">
+                    <span>Produtos em Estoque</span>
+                    <input type="text" id="inputBusca" class="search-box" placeholder="Filtrar produtos nesta página...">
                 </div>
                 <table>
                     <thead>
@@ -177,31 +213,35 @@
 
 <script>
     $(document).ready(function() {
-        $('#comboTrigger').on('click', function(e) {
-            $('#comboOptions').fadeToggle(150);
-            $('#campoFiltroProduto').focus();
+        var hoje = new Date().toISOString().split('T')[0];
+        $('#dataBaixa').val(hoje);
+
+
+        $('#baixaComboTrigger').on('click', function(e) {
+            $('#baixaComboOptions').fadeToggle(150);
+            $('#baixaCampoFiltroProduto').focus();
             e.stopPropagation();
         });
 
         $(document).on('click', function(e) {
-            if (!$(e.target).closest('.custom-select-wrapper').length) {
-                $('#comboOptions').fadeOut(100);
+            if (!$(e.target).closest('.baixa-select-wrapper').length) {
+                $('#baixaComboOptions').fadeOut(100);
             }
         });
 
-        $('.custom-option').on('click', function() {
+        $('.baixa-option').on('click', function() {
             var valor = $(this).data('value');
             var texto = $(this).text();
 
             $('#realProdutoInput').val(valor);
-            $('#comboTrigger').text(texto);
-            $('#comboOptions').fadeOut(100);
+            $('#baixaComboTrigger').text(texto);
+            $('#baixaComboOptions').fadeOut(100);
         });
 
-        $('#campoFiltroProduto').on('keyup', function() {
+        $('#baixaCampoFiltroProduto').on('keyup', function() {
             var filtro = $(this).val().toLowerCase();
 
-            $('.item-produto').each(function() {
+            $('.item-produto-baixa').each(function() {
                 var nomeProduto = $(this).text().toLowerCase();
                 if (nomeProduto.indexOf(filtro) > -1) {
                     $(this).show();
@@ -211,17 +251,32 @@
             });
         });
 
-        $('#campoFiltroProduto').on('click', function(e) {
+        $('#baixaCampoFiltroProduto').on('click', function(e) {
             e.stopPropagation();
         });
 
-        $('#btnConfirmarBaixa').on('click', function(e) {
-            e.preventDefault();
-            let form = $('#formBaixa');
-            form.attr('method', 'post');
-            form.attr('action', '/baixas/salvar');
-            form.submit();
+        $('#btnGatilhoConfirmar').on('click', function() {
+            if(!$('#realProdutoInput').val() || $('#inputQuantidade').val() <= 0 || !$('#selectMotivo').val() || !$('#dataBaixa').val()) {
+                alert('Preencha todos os campos do formulário corretamente antes de confirmar!');
+                return false;
+            }
+            $('#modalSenhaContainer').css('display', 'flex');
+            $('#inputSenhaModal').focus();
         });
+
+        $('#btnCancelarModal').on('click', function() {
+            $('#modalSenhaContainer').hide();
+            $('#inputSenhaModal').val('');
+        });
+
+        $('#formBaixa').on('submit', function(e) {
+            if(!$('#inputSenhaModal').val()) {
+                alert('A senha de autorização é obrigatória!');
+                e.preventDefault();
+                return false;
+            }
+        });
+
 
         var itensPorPagina = 5;
         var paginaAtual = 1;

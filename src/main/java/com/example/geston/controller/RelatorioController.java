@@ -4,6 +4,7 @@ import com.example.geston.service.RelatorioService;
 import com.example.geston.service.MovimentacaoService;
 import com.example.geston.service.ProdutoService;
 import com.example.geston.service.FornecedorService;
+import com.example.geston.model.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -77,6 +80,7 @@ public class RelatorioController {
     public ResponseEntity<byte[]> exportarRelatorio(
             @RequestParam("tipo") String tipo,
             @RequestParam(value = "operacao", required = false) String operacao,
+            @RequestParam(value = "filtroEstoque", required = false) String filtroEstoque, // <-- CAPTURA O FILTRO DO ESTOQUE ENVIADO PELA TELA
             @RequestParam(value = "dataInicio", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
             @RequestParam(value = "dataFim", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
 
@@ -88,29 +92,60 @@ public class RelatorioController {
 
         Context context = new Context();
 
-
         context.setVariable("exportMode", true);
-
 
         context.setVariable("tipoSelecionado", tipo);
         context.setVariable("operacaoSelecionada", (operacao != null && !operacao.equals("TODAS")) ? operacao : "");
 
-
         Map<String, String[]> paramSimulado = new HashMap<>();
         paramSimulado.put("tipo", new String[]{tipo});
         paramSimulado.put("operacao", new String[]{operacao != null ? operacao : "TODAS"});
+        paramSimulado.put("filtroEstoque", new String[]{filtroEstoque != null ? filtroEstoque : "TODOS"});
         paramSimulado.put("dataInicio", new String[]{inicioParam.toString()});
         paramSimulado.put("dataFim", new String[]{fimParam.toString()});
         context.setVariable("param", paramSimulado);
-
 
         context.setVariable("faturamentoPeriodo", relatorioService.calcularFaturamentoPeriodo(inicioDT, fimDT));
         context.setVariable("dataInicio", inicioParam);
         context.setVariable("dataFim", fimParam);
 
-
         context.setVariable("historicoMovimentacoes", relatorioService.buscarMovimentacoesPorPeriodo(inicioDT, fimDT, PageRequest.of(0, 1000, Sort.by("id").descending())));
-        context.setVariable("listaProdutos", produtoService.listarTodos());
+
+
+        List<Produto> produtosOriginais = produtoService.listarTodos();
+        List<Produto> produtosFiltrados;
+
+        if ("ESTOQUE".equals(tipo) && filtroEstoque != null) {
+            switch (filtroEstoque) {
+                case "MINIMO":
+
+                    produtosFiltrados = produtosOriginais.stream()
+                            .filter(p -> p.getQtdEstoque() <= 5)
+                            .collect(Collectors.toList());
+                    break;
+                case "ZERADO":
+
+                    produtosFiltrados = produtosOriginais.stream()
+                            .filter(p -> p.getQtdEstoque() == 0)
+                            .collect(Collectors.toList());
+                    break;
+                case "DISPONIVEL":
+
+                    produtosFiltrados = produtosOriginais.stream()
+                            .filter(p -> p.getQtdEstoque() > 0)
+                            .collect(Collectors.toList());
+                    break;
+                default:
+                    produtosFiltrados = produtosOriginais;
+                    break;
+            }
+        } else {
+            produtosFiltrados = produtosOriginais;
+        }
+
+        context.setVariable("listaProdutos", produtosFiltrados);
+
+
         context.setVariable("listaFornecedores", fornecedorService.listarTodos());
 
         String htmlConteudo = templateEngine.process("relatorios", context);
