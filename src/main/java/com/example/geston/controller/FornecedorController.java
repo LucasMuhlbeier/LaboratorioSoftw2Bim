@@ -22,14 +22,14 @@ public class FornecedorController {
             @RequestParam(defaultValue = "5") int size,
             Model model) {
 
-        // 1. Faz a busca paginada (de 5 em 5)
+
         Page<Fornecedor> fornecedoresPage = fornecedorRepository.findAll(PageRequest.of(page, size));
 
-        // 2. Passa os atributos para a tela seguindo o padrão
+
         model.addAttribute("fornecedoresPage", fornecedoresPage);
         model.addAttribute("currentPage", page);
 
-        // Mantém o objeto vazio que você usa para o formulário de cadastro modal/comum
+
         model.addAttribute("fornecedor", new Fornecedor());
 
         return "fornecedores";

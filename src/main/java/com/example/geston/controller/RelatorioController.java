@@ -80,7 +80,7 @@ public class RelatorioController {
     public ResponseEntity<byte[]> exportarRelatorio(
             @RequestParam("tipo") String tipo,
             @RequestParam(value = "operacao", required = false) String operacao,
-            @RequestParam(value = "filtroEstoque", required = false) String filtroEstoque, // <-- CAPTURA O FILTRO DO ESTOQUE ENVIADO PELA TELA
+            @RequestParam(value = "filtroEstoque", required = false) String filtroEstoque,
             @RequestParam(value = "dataInicio", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
             @RequestParam(value = "dataFim", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim) {
 

@@ -31,14 +31,12 @@ public class Produto {
     @Column(name = "data_vencimento")
     private LocalDate dataVencimento = LocalDate.now().plusYears(1);
 
-    // ====================================================================
-    // MODIFICADO: Transforma a String em um relacionamento real com Fornecedor
-    // ====================================================================
+
     @ManyToOne
     @JoinColumn(name = "fornecedor", referencedColumnName = "id")
     private Fornecedor fornecedor;
 
-    // Getters e Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getNome() { return nome; }
@@ -56,7 +54,7 @@ public class Produto {
     public LocalDate getDataVencimento() { return dataVencimento; }
     public void setDataVencimento(LocalDate dataVencimento) { this.dataVencimento = dataVencimento; }
 
-    // Atualizado para usar o objeto Fornecedor
+
     public Fornecedor getFornecedor() { return fornecedor; }
     public void setFornecedor(Fornecedor fornecedor) { this.fornecedor = fornecedor; }
 }
