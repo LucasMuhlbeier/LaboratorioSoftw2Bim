@@ -10,8 +10,9 @@ public class ItemMovimentacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_movimentacao", nullable = false)
+
+    @OneToOne
+    @JoinColumn(name = "id_movimentacao", nullable = false, unique = true)
     private Movimentacao movimentacao;
 
     @ManyToOne

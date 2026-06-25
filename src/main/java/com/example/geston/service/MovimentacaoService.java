@@ -27,6 +27,7 @@ public class MovimentacaoService {
         Produto produto = produtoRepository.findById(produtoId)
                 .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado ID: " + produtoId));
 
+
         if ("ENTRADA".equals(tipo)) {
             produto.setQtdEstoque(produto.getQtdEstoque() + quantidade);
         } else if ("SAIDA".equals(tipo) || "BAIXA".equals(tipo)) {
@@ -34,6 +35,7 @@ public class MovimentacaoService {
         }
 
         produtoRepository.save(produto);
+
 
         Movimentacao movimentacao = new Movimentacao();
         movimentacao.setTipo(tipo);
@@ -47,12 +49,20 @@ public class MovimentacaoService {
             movimentacao.setValorPerdido(0.0);
         }
 
+
         ItemMovimentacao item = new ItemMovimentacao();
         item.setProduto(produto);
         item.setQuantidade(quantidade);
         item.setMovimentacao(movimentacao);
 
-        movimentacao.getItens().add(item);
+        if ("ENTRADA".equals(tipo)) {
+            item.setPrecoUnitario(produto.getPrecoCusto() != null ? produto.getPrecoCusto() : 0.0);
+        } else {
+            item.setPrecoUnitario(produto.getPrecoVenda() != null ? produto.getPrecoVenda() : 0.0);
+        }
+
+
+        movimentacao.setItem(item);
 
         movimentacaoRepository.save(movimentacao);
     }
@@ -60,5 +70,4 @@ public class MovimentacaoService {
     public Page<Movimentacao> buscarUltimasAtividades(Pageable pageable) {
         return movimentacaoRepository.findAll(pageable);
     }
-
 }

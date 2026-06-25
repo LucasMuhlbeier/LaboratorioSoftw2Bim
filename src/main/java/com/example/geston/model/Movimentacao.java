@@ -2,8 +2,6 @@ package com.example.geston.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "movimentacao")
@@ -22,8 +20,9 @@ public class Movimentacao {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "movimentacao", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemMovimentacao> itens = new ArrayList<>();
+
+    @OneToOne(mappedBy = "movimentacao", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ItemMovimentacao item;
 
     public Long getId() {
         return id;
@@ -73,11 +72,12 @@ public class Movimentacao {
         this.usuario = usuario;
     }
 
-    public List<ItemMovimentacao> getItens() {
-        return itens;
+
+    public ItemMovimentacao getItem() {
+        return item;
     }
 
-    public void setItens(List<ItemMovimentacao> itens) {
-        this.itens = itens;
+    public void setItem(ItemMovimentacao item) {
+        this.item = item;
     }
 }

@@ -42,6 +42,7 @@ public class MovimentacaoController {
 
     @GetMapping("/entradas")
     public String telaEntradas(Model model) {
+        model.addAttribute("produto", new Produto());
         model.addAttribute("produtos", produtoService.listarTodos());
         model.addAttribute("fornecedores", fornecedorService.listarTodos());
         return "entradas";
@@ -107,11 +108,16 @@ public class MovimentacaoController {
     @PostMapping("/saidas/salvar")
     @Transactional
     public String salvarSaida(
-            @RequestParam("produtoId") Long produtoId,
-            @RequestParam("quantidade") Integer quantidade,
-            @RequestParam("dataSaida") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataSaida,
+            @RequestParam(value = "produtoId", required = false) Long produtoId,
+            @RequestParam(value = "quantidade", required = false) Integer quantidade,
+            @RequestParam(value = "dataSaida", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataSaida,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
+
+        if (produtoId == null || quantidade == null || quantidade <= 0) {
+            redirectAttributes.addFlashAttribute("erro", "Por favor, selecione um produto e digite uma quantidade válida.");
+            return "redirect:/saidas";
+        }
 
         Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
         if (usuarioLogado == null) {
@@ -149,30 +155,36 @@ public class MovimentacaoController {
     @PostMapping("/baixas/salvar")
     @Transactional
     public String salvarBaixa(
-            @RequestParam("produtoId") Long produtoId,
-            @RequestParam("quantidade") Integer quantidade,
-            @RequestParam("motivo") String motivo,
+            @RequestParam(value = "produtoId", required = false) Long produtoId,
+            @RequestParam(value = "quantidade", required = false) Integer quantidade,
+            @RequestParam(value = "motivo", required = false) String motivo,
             @RequestParam(value = "motivoPersonalizado", required = false) String motivoPersonalizado,
-            @RequestParam("dataBaixa") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataBaixa,
-            @RequestParam(value = "senhaAutenticacao", required = false, defaultValue = "123") String senhaAutenticacao,
+            @RequestParam(value = "dataBaixa", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataBaixa,
+            @RequestParam(value = "senhaAutenticacao", required = false) String senhaAutenticacao,
             HttpSession session,
             RedirectAttributes redirectAttributes) {
 
+        if (produtoId == null || quantidade == null || quantidade <= 0 || motivo == null || motivo.trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("erro", "Por favor, preencha todos os campos obrigatórios da baixa.");
+            return "redirect:/baixas";
+        }
 
         Optional<ParametroSistema> parametroOpt = parametroSistemaRepository.findById("SENHA_BAIXA");
         if (parametroOpt.isPresent()) {
             String senhaBanco = parametroOpt.get().getValor();
-            if (!senhaBanco.equals(senhaAutenticacao)) {
+            if (senhaAutenticacao == null || !senhaBanco.equals(senhaAutenticacao)) {
                 redirectAttributes.addFlashAttribute("erro", "Senha de autorização incorreta!");
                 return "redirect:/baixas";
             }
+        } else {
+            redirectAttributes.addFlashAttribute("erro", "Senha do sistema não configurada no banco de dados!");
+            return "redirect:/baixas";
         }
 
         Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
         if (usuarioLogado == null) {
             return "redirect:/login";
         }
-
 
         Produto produto;
         try {

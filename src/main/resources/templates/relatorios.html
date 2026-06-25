@@ -158,8 +158,6 @@
                         </select>
                     </div>
 
-
-
                     <button type="submit" class="btn-export">
                         📄 EXPORTAR RELATÓRIO EM PDF
                     </button>
@@ -189,9 +187,12 @@
                     <td th:text="${m.id}"></td>
                     <td th:text="${m.tipo}" th:style="${m.tipo == 'ENTRADA' ? 'color:#2e7d32;font-weight:700;' : (m.tipo == 'SAIDA' ? 'color:#000;font-weight:700;' : 'color:#d9534f;font-weight:700;')}"></td>
                     <td>
-                        <div th:each="item : ${m.itens}">
-                            <span th:text="${item.produto != null ? item.produto.nome : 'Produto não identificado'}" style="font-weight:600;"></span>
-                            <span th:text="' (' + ${item.quantidade} + ' un)'" style="color:#555; font-size:0.9rem;"></span>
+                        <div th:if="${m.item != null}">
+                            <span th:text="${m.item.produto != null ? m.item.produto.nome : 'Produto não identificado'}" style="font-weight:600;"></span>
+                            <span th:text="' (' + ${m.item.quantidade} + ' un)'" style="color:#555; font-size:0.9rem;"></span>
+                        </div>
+                        <div th:if="${m.item == null}">
+                            <span style="font-weight:600; color:#888;">Sem item associado</span>
                         </div>
                         <small th:if="${m.motivoBaixa != null}" th:text="'Motivo: ' + ${m.motivoBaixa}" style="color:#d9534f; display:block; margin-top:2px; font-weight:500;"></small>
                     </td>
@@ -218,7 +219,7 @@
                 <tr th:each="p : ${listaProdutos}" th:data-qtd="${p.qtdEstoque}">
                     <td th:text="${p.id}"></td>
                     <td th:text="${p.nome}" style="font-weight:bold;color:#000;"></td>
-                    <td th:text="${p.fornecedor != null ? p.fornecedor.nome : 'Não Informado'}"></td>
+                    <td th:text="${p.fornecedor != null ? f.fornecedor.nome : 'Não Informado'}" th:with="f=${p}"></td>
                     <td th:text="${p.qtdEstoque} + ' un'" th:style="${p.qtdEstoque <= 5 ? 'color: #d9534f; font-weight: 700;' : 'color: #2e7d32; font-weight: 600;'}"></td>
                     <td th:text="'R$ ' + ${#numbers.formatDecimal(p.precoCusto != null ? p.precoCusto : 0, 1, 2, 'POINT')}"></td>
                     <td th:text="'R$ ' + ${#numbers.formatDecimal(p.precoVenda != null ? p.precoVenda : 0, 1, 2, 'POINT')}"></td>

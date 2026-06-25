@@ -1,4 +1,4 @@
-package com.example.geston.config; // Ajuste para o seu pacote padrão
+package com.example.geston.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,13 +13,11 @@ public class AutorizacaoInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
 
-
         if (session.getAttribute("usuarioLogado") != null) {
             return true;
         }
 
-
-        response.sendRedirect("/login");
+        response.sendRedirect("/");
         return false;
     }
 }
